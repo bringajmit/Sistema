@@ -37,10 +37,10 @@ public boolean ingresarUsuario (Usuario nuevoUsuario)*/
 		assertFalse(sistema.ingresarUsuario(juan));
 	}
 
-	//c. Desarrolle el método calcularLaCantidadDeUsuariosLogueados. 
+	//c. Desarrolle el método calcularLaCantidadDeUsuariosEnSistema. 
 
 	@Test
-	public void testQueIndiqueCantidadDeUsuariosLogueados() {
+	public void testQueIndiqueCantidadDeUsuariosEnSistema() {
 		
 		Sistema sistema=new Sistema("Juanistation", 5);
 		Usuario juan=new Usuario("Juan", 31981186);
@@ -56,7 +56,7 @@ public boolean ingresarUsuario (Usuario nuevoUsuario)*/
 		sistema.ingresarUsuario(u4);
 		sistema.ingresarUsuario(u5);
 		
-		Integer obtenido=sistema.getCantidadDeUsuariosLogueados();
+		Integer obtenido=sistema.getCantidadDeUsuariosEnSistema();
 		Integer deseado=5;
 		
 		assertEquals(obtenido,deseado);
@@ -65,7 +65,7 @@ public boolean ingresarUsuario (Usuario nuevoUsuario)*/
 	//d. Desarrolle el método calcularLaCantidadDeUsuariosBloqueados. 
 
 	@Test
-	public void testQueIndiqueCantidadDeUsuariosBloqueados() {
+	public void testQueIndiqueCantidadDeUsuariosDesconectados() {
 		
 		Sistema sistema=new Sistema("Juanistation", 5);
 		Usuario juan=new Usuario("Juan", 31981186);
@@ -79,16 +79,18 @@ public boolean ingresarUsuario (Usuario nuevoUsuario)*/
 		sistema.ingresarUsuario(u3);
 		sistema.ingresarUsuario(u4);
 		
-		Integer obtenido=sistema.getCantidadDeUsuariosBloqueados();
+		Integer obtenido=sistema.getCantidadDeUsuariosDesconectados();
 		Integer deseado=2;
 		
+		
 		assertEquals(obtenido,deseado);
+		
 	}
 	
 	//e. Desarrolle el método calcularElPorcentajeDeUsuariosLogueados. 
 	
 	@Test
-	public void testQueIndiqueElPorcentajeDeUsuariosLogueados() {
+	public void testQueIndiqueElPorcentajeDeUsuariosEnSistema() {
 		
 		Sistema sistema=new Sistema("Juanistation", 5);
 		Usuario juan=new Usuario("Juan", 31981186);
@@ -99,12 +101,35 @@ public boolean ingresarUsuario (Usuario nuevoUsuario)*/
 		sistema.ingresarUsuario(u2);
 		
 		
-		double obtenido=sistema.calcularPorcentajeDeLogueados();
+		double obtenido=sistema.calcularPorcentajeDeUsuariosEnSistema();
 		double esperado=60.0;
 		
 		assertEquals(obtenido,esperado,0.01);
 		
+		
 	}
+	
+	@Test
+	public void testQueSePuedaLoguearUnNuevoUsuario() {
+		
+		Sistema sistema=new Sistema("Juanistation", 5);
+		Usuario juan=new Usuario("Juan", 31981186, "sacapuntas");
+		sistema.ingresarUsuario(juan);
+		
+		assertTrue(sistema.loguearUsuario(juan.getNombre(), juan.getContraseña()));
+	}
+	
+	
+	@Test
+	public void testQueNoSePuedaLoguearUnNuevoUsuarioConContraseñaIncorrecta() {
+		
+		Sistema sistema=new Sistema("Juanistation", 5);
+		Usuario juan=new Usuario("Juan", 31981186, "sacapuntas");
+		sistema.ingresarUsuario(juan);
+		
+		assertFalse(sistema.loguearUsuario(juan.getNombre(), "chirimbolo"));
+	}
+	
 	
 	
 }

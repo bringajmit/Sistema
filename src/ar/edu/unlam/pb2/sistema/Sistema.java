@@ -1,5 +1,6 @@
 package ar.edu.unlam.pb2.sistema;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -8,51 +9,74 @@ public class Sistema {
 	private String nombre;
 	private Integer cantidadMaximaDeUsuario;
 	private Set<Usuario> usuarios;
-	private Integer cantidadDeUsuariosLogueados;
-	private Integer cantidadDeUsuariosBloqueados;
+	private Integer cantidadDeUsuariosEnSistema;
+	private Integer cantidadDeUsuariosEstadoDesconectado;
 
 	public Sistema(String nombre, Integer cantidadMaximaDeUsuarios) {
-		cantidadDeUsuariosLogueados=0;
-		cantidadDeUsuariosBloqueados=0;
+		cantidadDeUsuariosEnSistema=0;
+		cantidadDeUsuariosEstadoDesconectado=0;
 		this.nombre=nombre;
 		this.cantidadMaximaDeUsuario=cantidadMaximaDeUsuarios;
-		usuarios=new TreeSet<Usuario>();
+		usuarios=new HashSet<Usuario>();
 	}
 
 	public boolean ingresarUsuario(Usuario usuario) {
 		for (Usuario u : usuarios) {
-			if(u.getDni().equals(usuario.getDni()) || cantidadDeUsuariosLogueados>=getCantidadMaximaDeUsuario()  ) {
-				cantidadDeUsuariosBloqueados++;
+			if(u.getDni().equals(usuario.getDni()) || cantidadDeUsuariosEnSistema>=getCantidadMaximaDeUsuario()  ) {
+				cantidadDeUsuariosEstadoDesconectado++;
+				usuario.setEstado(Estado.EN_SISTEMA);
 				return false;
 			}
 		}	
-		cantidadDeUsuariosLogueados++;
+		cantidadDeUsuariosEnSistema++;
 		return usuarios.add(usuario);
 		
 	}
 	
-	public Double calcularPorcentajeDeLogueados() {
+	public Double calcularPorcentajeDeUsuariosEnSistema() {
 		Double porcentaje=0.0;
 		
-		porcentaje=cantidadDeUsuariosLogueados*100.0/cantidadMaximaDeUsuario;
+		porcentaje=cantidadDeUsuariosEnSistema*100.0/cantidadMaximaDeUsuario;
 		
 		return porcentaje;		
 	}
 
-	public Integer getCantidadDeUsuariosBloqueados() {
-		return cantidadDeUsuariosBloqueados;
+	//f. En la clase Sistema desarrolle el método loguearUsuario, el cual devolverá true si
+		//se logra loguear al usuario y false en caso contrario:
+			//public boolean loguearUsuario (String usuario, String contraseña) 
+	
+	public boolean loguearUsuario (String usuario, String contraseña) {
+		boolean loguearUsuario=false;
+		for (Usuario u : usuarios) {
+			//if(u.getEstado()==Estado.EN_SISTEMA) {
+				if(u.getNombre()==usuario &&  u.getContraseña().equals(contraseña)) {
+					u.setEstado(Estado.LOGUEADO);
+					loguearUsuario= true;
+				//}
+			}
+		}
+		
+		
+		return loguearUsuario;
+		
+	}
+	
+	
+	
+	public Integer getCantidadDeUsuariosDesconectados() {
+		return cantidadDeUsuariosEstadoDesconectado;
 	}
 
-	public void setCantidadDeUsuariosBloqueados(Integer cantidadDeUsuariosBloqueados) {
-		this.cantidadDeUsuariosBloqueados = cantidadDeUsuariosBloqueados;
+	public void setCantidadDeUsuariosDesconectados(Integer cantidadDeUsuariosDesconectados) {
+		this.cantidadDeUsuariosEstadoDesconectado = cantidadDeUsuariosDesconectados;
 	}
 
-	public Integer getCantidadDeUsuariosLogueados() {
-		return cantidadDeUsuariosLogueados;
+	public Integer getCantidadDeUsuariosEnSistema() {
+		return cantidadDeUsuariosEnSistema;
 	}
 
-	public void setCantidadDeUsuariosLogueados(Integer cantidadDeUsuariosLogueados) {
-		this.cantidadDeUsuariosLogueados = cantidadDeUsuariosLogueados;
+	public void setCantidadDeUsuariosEnSistema(Integer cantidadDeUsuariosEnSistema) {
+		this.cantidadDeUsuariosEnSistema = cantidadDeUsuariosEnSistema;
 	}
 
 	public String getNombre() {
